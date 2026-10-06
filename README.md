@@ -12,7 +12,5 @@ Este projeto consiste no desenvolvimento de uma solução web integrada para a o
 
 #--- Dados de Acesso ao Painel Admin: ---#
 Senha / PIN de Acesso: 1234
-
 Aba "Loja & Catálogo": Área pública onde os clientes navegam pelas frutas e realizam compras.
-
 Aba "Painel Admin": Área restrita onde fica a Tabela de Desempenho de Vendas (Dia, Semana, Mês), indicadores de patrimônio e a opção de encerrar a sessão administrativa.
