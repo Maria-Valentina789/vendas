@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hortifruti Mercado Verde - Catálogo & Compras</title>
-    <!-- Tailwind CSS for modern responsive styling -->
+    <title>Hortifruti Mercado Verde - Sistema Completo</title>
+    <!-- Tailwind CSS para estilização moderna e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for UI icons -->
+    <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -27,7 +27,6 @@
             transform: translateY(-4px);
             box-shadow: 0 12px 24px -10px rgba(16, 185, 129, 0.3);
         }
-        /* Custom scrollbar styling */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -42,7 +41,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #059669;
         }
-        /* Bounce animation for badge */
         @keyframes pop-badge {
             0% { transform: scale(1); }
             50% { transform: scale(1.3); }
@@ -55,149 +53,248 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
-    <div class="bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-3 text-sm font-medium z-40">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-lightbulb text-amber-600 text-lg flex-shrink-0"></i>
-                <span><strong>Como salvar no Bloco de Notas:</strong> Vá em <em>Arquivo &gt; Salvar Como...</em>, nomeie como <code class="bg-amber-100 px-2 py-0.5 rounded text-amber-950 font-bold border border-amber-300">mercado.html</code> e em <em>Tipo</em> escolha <strong>"Todos os arquivos (*.*)"</strong>.</span>
-            </div>
-            <button onclick="this.parentElement.parentElement.remove()" class="text-amber-700 hover:text-amber-950 text-xs font-bold underline cursor-pointer flex-shrink-0">
-                Entendi, fechar aviso
-            </button>
-        </div>
-    </div>
-
+    <!-- Cabeçalho Principal com Navegação por Abas -->
     <header class="bg-emerald-gradient text-white shadow-lg sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
-            <!-- Brand Logo -->
-            <div class="flex items-center gap-3">
-                <div class="w-11 h-11 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white text-xl shadow-inner border border-white/20">
-                    <i class="fa-solid fa-basket-shopping"></i>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white text-xl shadow-inner border border-white/20">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight leading-tight">Mercado Verde</h1>
+                        <p class="text-[11px] text-emerald-100 font-medium">Gestão de Vendas & Catálogo</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight leading-tight">Hortifruti Mercado Verde</h1>
-                    <p class="text-[11px] text-emerald-100 font-medium hidden sm:block">Catálogo em Tempo Real & Compra Direta</p>
-                </div>
+
+                <!-- Botão Carrinho (Mobile) -->
+                <button onclick="toggleCartDrawer()" class="md:hidden relative bg-white/15 hover:bg-white/25 border border-white/30 text-white p-2.5 rounded-xl transition-all active:scale-95">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cart-badge-count-mobile" class="absolute -top-1 -right-1 bg-amber-400 text-amber-950 text-[10px] font-black px-1.5 py-0.2 rounded-full shadow-md">0</span>
+                </button>
             </div>
 
-            <!-- Header Right Controls -->
-            <div class="flex items-center gap-3">
-                <!-- Cart Button with Counter Badge -->
+            <!-- Menus de Navegação (Abas) -->
+            <div class="flex items-center gap-2 w-full md:w-auto justify-center bg-black/10 p-1 rounded-2xl backdrop-blur-md">
+                <button id="tab-btn-shop" onclick="switchTab('shop')" class="flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-emerald-900 shadow-sm">
+                    <i class="fa-solid fa-store"></i> Loja & Catálogo
+                </button>
+                <button id="tab-btn-admin" onclick="switchTab('admin')" class="flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-white/80 hover:text-white hover:bg-white/10">
+                    <i class="fa-solid fa-user-shield"></i> Painel Admin
+                    <span id="admin-status-badge" class="bg-amber-400 text-amber-950 text-[10px] font-black px-1.5 py-0.5 rounded-md hidden">ATIVO</span>
+                </button>
+            </div>
+
+            <!-- Botão Carrinho (Desktop) -->
+            <div class="hidden md:flex items-center gap-3">
                 <button onclick="toggleCartDrawer()" class="relative bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded-xl flex items-center gap-2.5 transition-all shadow-sm active:scale-95">
                     <i class="fa-solid fa-cart-shopping text-lg"></i>
-                    <span class="font-bold text-sm hidden sm:inline">Meu Carrinho</span>
+                    <span class="font-bold text-sm">Meu Carrinho</span>
                     <span id="cart-badge-count" class="bg-amber-400 text-amber-950 text-xs font-black px-2 py-0.5 rounded-full shadow-md">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Notification Toast Container -->
+    <!-- Notificações Toast -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
 
-        <!-- Metrics Dashboard -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-emerald-100 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-apple-whole"></i>
+        <!-- ==================== ABA 1: CLIENTE / LOJA ==================== -->
+        <div id="view-shop" class="space-y-8">
+            
+            <!-- Barra de Busca e Filtros -->
+            <section class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-emerald-100 flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div class="relative w-full md:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        placeholder="Buscar por código, fruta ou descrição..." 
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm transition-all"
+                        oninput="filterProducts()"
+                    >
                 </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Produtos em Catálogo</p>
-                    <p class="text-2xl font-extrabold text-gray-900" id="stat-total-items">3</p>
-                    <p class="text-[11px] text-emerald-600 font-medium">Disponíveis no mercado</p>
+
+                <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                    <div class="flex items-center gap-2">
+                        <label for="sort-select" class="text-xs font-semibold text-gray-500">Ordenar:</label>
+                        <select id="sort-select" onchange="filterProducts()" class="border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="default">Ordem Padrão</option>
+                            <option value="price-asc">Menor Preço</option>
+                            <option value="price-desc">Maior Preço</option>
+                            <option value="stock-desc">Maior Estoque</option>
+                        </select>
+                    </div>
                 </div>
+            </section>
+
+            <!-- Grade de Produtos -->
+            <section id="grid-view" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards renderizados via JS -->
+            </section>
+
+            <!-- Estado Vazio para Busca -->
+            <div id="empty-state" class="hidden bg-white p-12 rounded-2xl text-center border border-dashed border-gray-300 space-y-3">
+                <i class="fa-solid fa-basket-shopping text-5xl text-gray-300"></i>
+                <h3 class="text-lg font-bold text-gray-700">Nenhum produto encontrado</h3>
+                <p class="text-sm text-gray-500">Ajuste o termo da busca para localizar o produto desejado.</p>
+            </div>
+        </div>
+
+        <!-- ==================== ABA 2: ADMINISTRADOR (RESTRITA) ==================== -->
+        <div id="view-admin" class="hidden space-y-8">
+            
+            <!-- Banner do Administrador -->
+            <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-slate-800">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center text-2xl font-black shadow-lg">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-extrabold">Painel de Gestão Administrativa</h2>
+                            <span class="bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Sessão Autenticada</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Acompanhamento restrito de relatórios financeiros e vendas por período.</p>
+                    </div>
+                </div>
+
+                <button onclick="logoutAdmin()" class="bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 self-start sm:self-auto">
+                    <i class="fa-solid fa-lock"></i> Encerrar Sessão Admin
+                </button>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-emerald-100 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-boxes-packing"></i>
+            <!-- Painel de Métricas de Estoque e Patrimônio -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-emerald-100 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-apple-whole"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Produtos no Catálogo</p>
+                        <p class="text-2xl font-extrabold text-gray-900" id="stat-total-items">0</p>
+                        <p class="text-[11px] text-emerald-600 font-medium">Itens cadastrados</p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Estoque Global</p>
-                    <p class="text-2xl font-extrabold text-gray-900" id="stat-total-stock">355</p>
-                    <p class="text-[11px] text-blue-600 font-medium">Itens em prateleira</p>
-                </div>
-            </div>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-emerald-100 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-cart-flatbed"></i>
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-emerald-100 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-boxes-packing"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Estoque Físico Total</p>
+                        <p class="text-2xl font-extrabold text-gray-900" id="stat-total-stock">0</p>
+                        <p class="text-[11px] text-blue-600 font-medium">Unidades disponíveis</p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Itens no Carrinho</p>
-                    <p class="text-2xl font-extrabold text-amber-700" id="stat-cart-qty">0</p>
-                    <p class="text-[11px] text-amber-600 font-medium" id="stat-cart-subtotal">Subtotal: R$ 0,00</p>
+
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-emerald-100 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-vault"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Valor Total do Estoque</p>
+                        <p class="text-2xl font-extrabold text-emerald-700" id="stat-total-val">R$ 0,00</p>
+                        <p class="text-[11px] text-emerald-600 font-medium">Patrimônio em mercadoria</p>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-emerald-100 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-vault"></i>
+            <!-- TABELA DE DESEMPENHO DE VENDAS -->
+            <section class="bg-white rounded-3xl shadow-sm border border-emerald-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-emerald-800 to-emerald-700 p-5 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-extrabold">Relatório de Desempenho de Vendas</h3>
+                            <p class="text-xs text-emerald-100">Consolidado por Dia, Semana e Mês (Atualização Automática)</p>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-900/60 border border-emerald-500/30 text-emerald-200 text-xs font-semibold self-start sm:self-auto">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Tempo Real
+                    </span>
                 </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">Patrimônio do Estoque</p>
-                    <p class="text-2xl font-extrabold text-emerald-700" id="stat-total-val">R$ 2.461,30</p>
-                    <p class="text-[11px] text-emerald-600 font-medium">Valor total dos produtos</p>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="bg-emerald-50/70 border-b border-emerald-100 text-emerald-950 uppercase font-bold text-[11px] tracking-wider">
+                                <th class="py-3.5 px-4 sm:px-6">Produto</th>
+                                <th class="py-3.5 px-4 text-center bg-emerald-100/50">Vendas Hoje (Dia)</th>
+                                <th class="py-3.5 px-4 text-center">Vendas esta Semana</th>
+                                <th class="py-3.5 px-4 text-center bg-emerald-100/50">Vendas este Mês</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-table-body" class="divide-y divide-gray-100 font-medium text-gray-700">
+                            <!-- Linhas geradas via JS -->
+                        </tbody>
+                        <tfoot id="sales-table-footer" class="bg-emerald-900 text-white font-extrabold text-xs sm:text-sm">
+                            <!-- Totais consolidados via JS -->
+                        </tfoot>
+                    </table>
                 </div>
-            </div>
-        </section>
-
-        <section class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-emerald-100 flex flex-col md:flex-row gap-4 items-center justify-between">
-            <!-- Search Bar -->
-            <div class="relative w-full md:w-96">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                <input 
-                    type="text" 
-                    id="search-input" 
-                    placeholder="Buscar por código, fruta ou descrição..." 
-                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm transition-all"
-                    oninput="filterProducts()"
-                >
-            </div>
-
-            <!-- Sorting & Quick Action -->
-            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-                <div class="flex items-center gap-2">
-                    <label for="sort-select" class="text-xs font-semibold text-gray-500">Ordenar:</label>
-                    <select id="sort-select" onchange="filterProducts()" class="border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                        <option value="default">Ordem Padrão</option>
-                        <option value="price-asc">Menor Preço</option>
-                        <option value="price-desc">Maior Preço</option>
-                        <option value="stock-desc">Maior Estoque</option>
-                    </select>
-                </div>
-            </div>
-        </section>
-
-        <section id="grid-view" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Dynamic product cards will be generated by JavaScript -->
-        </section>
-
-        <!-- Empty State Container -->
-        <div id="empty-state" class="hidden bg-white p-12 rounded-2xl text-center border border-dashed border-gray-300 space-y-3">
-            <i class="fa-solid fa-basket-shopping text-5xl text-gray-300"></i>
-            <h3 class="text-lg font-bold text-gray-700">Nenhum produto encontrado</h3>
-            <p class="text-sm text-gray-500">Ajuste o termo da busca para localizar o produto desejado.</p>
+            </section>
         </div>
 
     </main>
 
-    <!-- Footer -->
+    <!-- Rodapé -->
     <footer class="bg-emerald-950 text-emerald-300 py-6 mt-auto border-t border-emerald-900">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
             <p class="font-bold text-emerald-100">Hortifruti Mercado Verde &copy; 2026 - Todos os direitos reservados</p>
-            <p class="text-emerald-400">Sistema completo com controle de compras, validação de estoque e fechamento de pedidos em arquivo único HTML.</p>
+            <p class="text-emerald-400">Sistema com Área de Administrador Protegida por Senha.</p>
         </div>
     </footer>
 
-    <!-- Cart Drawer Modal Backdrop -->
+    <!-- Modal de Login do Administrador -->
+    <div id="admin-login-modal-backdrop" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div id="admin-login-modal-card" class="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl transform scale-95 transition-all duration-300 border border-emerald-100 p-6 space-y-5">
+            
+            <div class="text-center space-y-2">
+                <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold border border-emerald-200">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-900">Acesso Restrito</h3>
+                <p class="text-xs text-gray-500">Digite a senha de administrador para acessar a tabela de desempenho de vendas.</p>
+            </div>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">PIN / Senha Admin:</label>
+                    <input 
+                        type="password" 
+                        id="admin-pin-input" 
+                        placeholder="••••" 
+                        maxlength="10"
+                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-center font-mono text-lg tracking-widest font-bold text-gray-800"
+                        required
+                    >
+                    <p class="text-[11px] text-gray-400 text-center mt-1">Dica: A senha padrão é <strong class="text-emerald-700">1234</strong></p>
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="button" onclick="closeAdminLoginModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition-all">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all shadow-md">
+                        Entrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fundo Escuro do Carrinho -->
     <div id="cart-drawer-backdrop" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- Sliding Cart Drawer Container -->
+    <!-- Gaveta do Carrinho -->
     <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
-        <!-- Cart Drawer Header -->
         <div class="bg-emerald-gradient p-5 text-white flex items-center justify-between shadow-md">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-cart-shopping text-2xl"></i>
@@ -211,12 +308,10 @@
             </button>
         </div>
 
-        <!-- Cart Items List (Scrollable) -->
         <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4 divide-y divide-gray-100">
-            <!-- Dynamic Cart Items Rendered Here -->
+            <!-- Itens do carrinho -->
         </div>
 
-        <!-- Cart Drawer Summary Footer -->
         <div class="p-5 bg-emerald-50/60 border-t border-emerald-100 space-y-4">
             <div class="space-y-2 text-sm">
                 <div class="flex justify-between text-gray-600">
@@ -233,7 +328,6 @@
                 </div>
             </div>
 
-            <!-- Cart Drawer Action Buttons -->
             <div class="space-y-2">
                 <button id="checkout-btn" onclick="checkout()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     <i class="fa-solid fa-circle-check"></i> Finalizar Compra
@@ -245,30 +339,26 @@
         </div>
     </div>
 
-    <!-- Order Receipt Modal -->
+    <!-- Modal de Comprovante de Compra -->
     <div id="receipt-modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
         <div id="receipt-modal-card" class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl transform scale-95 transition-all duration-300 border border-emerald-100 flex flex-col max-h-[90vh]">
-            <!-- Modal Header -->
             <div class="bg-emerald-gradient p-6 text-white text-center relative">
                 <div class="w-16 h-16 bg-white text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl shadow-lg">
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
-                <h2 class="text-2xl font-extrabold">Compra Finalizada com Sucesso!</h2>
-                <p class="text-xs text-emerald-100 mt-1">O estoque do mercado foi atualizado em tempo real.</p>
+                <h2 class="text-2xl font-extrabold">Compra Finalizada!</h2>
+                <p class="text-xs text-emerald-100 mt-1">O estoque e o relatório de vendas foram atualizados no Painel Admin.</p>
             </div>
 
-            <!-- Receipt Body -->
             <div class="p-6 space-y-4 overflow-y-auto flex-1">
                 <div class="flex justify-between items-center text-xs text-gray-500 pb-3 border-b border-gray-100">
-                    <span>Comprovante Nº: <strong id="receipt-number" class="text-gray-800">#98214</strong></span>
+                    <span>Comprovante Nº: <strong id="receipt-number" class="text-gray-800">#000000</strong></span>
                     <span id="receipt-date"></span>
                 </div>
 
                 <div class="space-y-3">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400">Resumo dos Itens Adquiridos:</h4>
-                    <div id="receipt-items-list" class="space-y-2">
-                        <!-- Receipt items rendered here -->
-                    </div>
+                    <div id="receipt-items-list" class="space-y-2"></div>
                 </div>
 
                 <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100 flex justify-between items-center">
@@ -280,16 +370,15 @@
                 </div>
             </div>
 
-            <!-- Modal Footer -->
             <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-center">
                 <button onclick="closeReceiptModal()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl transition-all shadow-md">
-                    Entendido, Voltar ao Mercado
+                    Entendido, Voltar à Loja
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Product Detail Modal -->
+    <!-- Modal de Detalhes do Produto -->
     <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
         <div id="modal-card" class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl transform scale-95 transition-all duration-300 border border-emerald-100">
             <div class="bg-emerald-gradient p-5 text-white relative">
@@ -330,8 +419,14 @@
         </div>
     </div>
 
+    <!-- JavaScript do Sistema -->
     <script>
-        // Official Product Dataset
+        // Estado de Autenticação do Administrador (Senha Padrão: 1234)
+        const ADMIN_PIN_SECRET = "1234";
+        let isAdminLoggedIn = false;
+        let currentTab = 'shop';
+
+        // Catálogo de Produtos
         const products = [
             {
                 id: 1,
@@ -340,10 +435,10 @@
                 description: "Bananas pratas frescas e doces, selecionadas, ricas em potássio.",
                 unitCost: 5.99,
                 unitType: "kg",
-                stockQty: 120, // Initial stock 120 kg
-                selectedQty: 1, // Quantity buffer on card
+                stockQty: 120,
+                selectedQty: 1,
                 imageSvg: `
-                <svg class="w-28 h-28 transform hover:scale-105 transition-transform" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-24 h-24 transform hover:scale-105 transition-transform" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M25 75C20 65 22 40 45 25C65 12 80 15 85 18C83 22 75 30 60 38C40 48 35 65 32 78C30 82 27 80 25 75Z" fill="#FACC15"/>
                     <path d="M20 78C15 68 18 42 42 27C60 15 76 17 81 20C79 24 71 31 57 39C38 49 32 66 28 80C26 83 22 81 20 78Z" fill="#FDE047"/>
                     <path d="M81 20L87 15L83 12L77 17L81 20Z" fill="#15803D"/>
@@ -357,10 +452,10 @@
                 description: "Morangos vermelhos e suculentos, ideais para sobremesas e sucos.",
                 unitCost: 8.50,
                 unitType: "caixa",
-                stockQty: 85, // Initial stock 85 caixas
+                stockQty: 85,
                 selectedQty: 1,
                 imageSvg: `
-                <svg class="w-28 h-28 transform hover:scale-105 transition-transform" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-24 h-24 transform hover:scale-105 transition-transform" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M50 88C50 88 22 68 22 42C22 28 34 22 50 24C66 22 78 28 78 42C78 68 50 88 50 88Z" fill="#EF4444"/>
                     <path d="M50 24C42 16 28 18 28 18C28 18 36 28 44 26C44 26 40 12 50 8C60 12 56 26 56 26C64 28 72 18 72 18C72 18 58 16 50 24Z" fill="#16A34A"/>
                     <circle cx="38" cy="38" r="1.5" fill="#FDE047"/>
@@ -381,10 +476,10 @@
                 description: "Bergamotas / tangerinas frescas, fáceis de descascar e muito doces.",
                 unitCost: 6.80,
                 unitType: "kg",
-                stockQty: 150, // Initial stock 150 kg
+                stockQty: 150,
                 selectedQty: 1,
                 imageSvg: `
-                <svg class="w-28 h-28 transform hover:scale-105 transition-transform" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-24 h-24 transform hover:scale-105 transition-transform" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="50" cy="54" r="32" fill="#F97316"/>
                     <circle cx="50" cy="54" r="29" fill="#FB923C"/>
                     <path d="M50 22C50 22 55 12 65 14C65 14 62 24 50 22Z" fill="#15803D"/>
@@ -398,13 +493,106 @@
             }
         ];
 
-        // Shopping Cart State: Array of { productId, qty }
+        // Registro de Vendas (Acumulado)
+        const salesData = {
+            1: { // Banana Prata
+                day: { qty: 15, revenue: 89.85 },
+                week: { qty: 85, revenue: 509.15 },
+                month: { qty: 340, revenue: 2036.60 }
+            },
+            2: { // Morango Doce
+                day: { qty: 8, revenue: 68.00 },
+                week: { qty: 42, revenue: 357.00 },
+                month: { qty: 190, revenue: 1615.00 }
+            },
+            3: { // Bergamota Ponkan
+                day: { qty: 22, revenue: 149.60 },
+                week: { qty: 110, revenue: 748.00 },
+                month: { qty: 450, revenue: 3060.00 }
+            }
+        };
+
+        // Estado do Carrinho
         let cart = [];
 
         function formatMoney(val) {
             return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
+        // Navegação por Abas e Controle Admin
+        function switchTab(tab) {
+            if (tab === 'admin' && !isAdminLoggedIn) {
+                openAdminLoginModal();
+                return;
+            }
+
+            currentTab = tab;
+            const viewShop = document.getElementById('view-shop');
+            const viewAdmin = document.getElementById('view-admin');
+
+            const btnShop = document.getElementById('tab-btn-shop');
+            const btnAdmin = document.getElementById('tab-btn-admin');
+
+            if (tab === 'shop') {
+                viewShop.classList.remove('hidden');
+                viewAdmin.classList.add('hidden');
+
+                btnShop.className = "flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-emerald-900 shadow-sm";
+                btnAdmin.className = "flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-white/80 hover:text-white hover:bg-white/10";
+            } else if (tab === 'admin') {
+                viewShop.classList.add('hidden');
+                viewAdmin.classList.remove('hidden');
+
+                btnAdmin.className = "flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-emerald-900 shadow-sm";
+                btnShop.className = "flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-white/80 hover:text-white hover:bg-white/10";
+            }
+        }
+
+        function openAdminLoginModal() {
+            const backdrop = document.getElementById('admin-login-modal-backdrop');
+            const card = document.getElementById('admin-login-modal-card');
+            const pinInput = document.getElementById('admin-pin-input');
+
+            pinInput.value = '';
+            backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+            setTimeout(() => pinInput.focus(), 150);
+        }
+
+        function closeAdminLoginModal() {
+            const backdrop = document.getElementById('admin-login-modal-backdrop');
+            const card = document.getElementById('admin-login-modal-card');
+
+            backdrop.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pinInput = document.getElementById('admin-pin-input').value.trim();
+
+            if (pinInput === ADMIN_PIN_SECRET) {
+                isAdminLoggedIn = true;
+                closeAdminLoginModal();
+                document.getElementById('admin-status-badge').classList.remove('hidden');
+                showToast("Autenticado como Administrador!", "emerald");
+                switchTab('admin');
+            } else {
+                showToast("PIN incorreto! Tente a senha '1234'.", "rose");
+                document.getElementById('admin-pin-input').value = '';
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            document.getElementById('admin-status-badge').classList.add('hidden');
+            showToast("Sessão do administrador encerrada.", "amber");
+            switchTab('shop');
+        }
+
+        // Métodos de Carrinho e Vendas
         function getCartItemQty(productId) {
             const item = cart.find(i => i.productId === productId);
             return item ? item.qty : 0;
@@ -435,8 +623,6 @@
             }
 
             product.selectedQty = newQty;
-            
-            // Update DOM inputs dynamically for fast performance
             const inputEl = document.getElementById(`qty-input-${productId}`);
             if (inputEl) inputEl.value = newQty;
         }
@@ -478,12 +664,10 @@
                 cart.push({ productId: productId, qty: wantQty });
             }
 
-            // Reset selected card quantity
             const remainingStock = getAvailableStock(productId);
             product.selectedQty = remainingStock > 0 ? 1 : 0;
 
             showToast(`${wantQty}x ${product.name} adicionado(s) ao carrinho!`, 'emerald');
-            
             animateBadge();
             updateAllViews();
         }
@@ -497,7 +681,6 @@
                 return;
             }
 
-            // Check against overall physical stock
             if (newQty > product.stockQty) {
                 newQty = product.stockQty;
                 showToast(`Limite máximo em estoque atingido (${product.stockQty} ${product.unitType}).`, 'amber');
@@ -536,16 +719,27 @@
             let receiptItemsHtml = '';
             let totalPaid = 0;
 
-            // Process stock deduction in real time
             cart.forEach(item => {
                 const product = products.find(p => p.id === item.productId);
                 if (product) {
                     const itemSubtotal = product.unitCost * item.qty;
                     totalPaid += itemSubtotal;
 
-                    // DEDUCT STOCK REALTIME
+                    // Baixa real do estoque
                     product.stockQty = Math.max(0, product.stockQty - item.qty);
                     product.selectedQty = product.stockQty > 0 ? 1 : 0;
+
+                    // Atualiza Tabela de Vendas do Administrador (Dia, Semana, Mês)
+                    if (salesData[product.id]) {
+                        salesData[product.id].day.qty += item.qty;
+                        salesData[product.id].day.revenue += itemSubtotal;
+
+                        salesData[product.id].week.qty += item.qty;
+                        salesData[product.id].week.revenue += itemSubtotal;
+
+                        salesData[product.id].month.qty += item.qty;
+                        salesData[product.id].month.revenue += itemSubtotal;
+                    }
 
                     receiptItemsHtml += `
                         <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border border-gray-100 text-xs">
@@ -559,19 +753,118 @@
                 }
             });
 
-            // Populate Receipt Modal
             document.getElementById('receipt-number').textContent = `#${Math.floor(100000 + Math.random() * 900000)}`;
             document.getElementById('receipt-date').textContent = new Date().toLocaleString('pt-BR');
             document.getElementById('receipt-items-list').innerHTML = receiptItemsHtml;
             document.getElementById('receipt-total-val').textContent = formatMoney(totalPaid);
 
-            // Empty cart after checkout
             cart = [];
 
-            // Hide drawer, render updated stock, show receipt modal
             toggleCartDrawer(false);
             updateAllViews();
             openReceiptModal();
+        }
+
+        // Renderizador da Tabela de Vendas do Administrador
+        function renderSalesTable() {
+            const tbody = document.getElementById('sales-table-body');
+            const tfoot = document.getElementById('sales-table-footer');
+
+            tbody.innerHTML = '';
+
+            let totals = {
+                dayQty: 0, dayRev: 0,
+                weekQty: 0, weekRev: 0,
+                monthQty: 0, monthRev: 0
+            };
+
+            products.forEach(p => {
+                const pSales = salesData[p.id] || {
+                    day: { qty: 0, revenue: 0 },
+                    week: { qty: 0, revenue: 0 },
+                    month: { qty: 0, revenue: 0 }
+                };
+
+                totals.dayQty += pSales.day.qty;
+                totals.dayRev += pSales.day.revenue;
+                totals.weekQty += pSales.week.qty;
+                totals.weekRev += pSales.week.revenue;
+                totals.monthQty += pSales.month.qty;
+                totals.monthRev += pSales.month.revenue;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-emerald-50/40 transition-colors border-b border-gray-100";
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 sm:px-6 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0">
+                            ${p.imageSvg}
+                        </div>
+                        <div>
+                            <span class="font-bold text-gray-900 block">${p.name}</span>
+                            <span class="text-[11px] text-gray-400 font-mono">${p.code} • ${formatMoney(p.unitCost)}/${p.unitType}</span>
+                        </div>
+                    </td>
+
+                    <td class="py-3.5 px-4 text-center bg-emerald-50/30">
+                        <span class="font-bold text-emerald-950 block">${pSales.day.qty} <span class="text-[11px] text-gray-500 font-normal">${p.unitType}</span></span>
+                        <span class="text-xs font-semibold text-emerald-700">${formatMoney(pSales.day.revenue)}</span>
+                    </td>
+
+                    <td class="py-3.5 px-4 text-center">
+                        <span class="font-bold text-gray-900 block">${pSales.week.qty} <span class="text-[11px] text-gray-500 font-normal">${p.unitType}</span></span>
+                        <span class="text-xs font-semibold text-emerald-700">${formatMoney(pSales.week.revenue)}</span>
+                    </td>
+
+                    <td class="py-3.5 px-4 text-center bg-emerald-50/30">
+                        <span class="font-bold text-emerald-950 block">${pSales.month.qty} <span class="text-[11px] text-gray-500 font-normal">${p.unitType}</span></span>
+                        <span class="text-xs font-semibold text-emerald-700">${formatMoney(pSales.month.revenue)}</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            tfoot.innerHTML = `
+                <tr>
+                    <td class="py-3.5 px-4 sm:px-6 uppercase tracking-wider text-emerald-100">Total Consolidado</td>
+                    <td class="py-3.5 px-4 text-center bg-emerald-950/40">
+                        <span class="block">${totals.dayQty} itens</span>
+                        <span class="text-amber-300 font-black">${formatMoney(totals.dayRev)}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center">
+                        <span class="block">${totals.weekQty} itens</span>
+                        <span class="text-amber-300 font-black">${formatMoney(totals.weekRev)}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center bg-emerald-950/40">
+                        <span class="block">${totals.monthQty} itens</span>
+                        <span class="text-amber-300 font-black">${formatMoney(totals.monthRev)}</span>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function getFilteredProducts() {
+            const searchTerm = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+            const sortMode = document.getElementById('sort-select')?.value || 'default';
+
+            let filtered = products.filter(p => 
+                p.name.toLowerCase().includes(searchTerm) || 
+                p.code.toLowerCase().includes(searchTerm) || 
+                p.description.toLowerCase().includes(searchTerm)
+            );
+
+            if (sortMode === 'price-asc') {
+                filtered.sort((a, b) => a.unitCost - b.unitCost);
+            } else if (sortMode === 'price-desc') {
+                filtered.sort((a, b) => b.unitCost - a.unitCost);
+            } else if (sortMode === 'stock-desc') {
+                filtered.sort((a, b) => b.stockQty - a.stockQty);
+            }
+
+            return filtered;
+        }
+
+        function filterProducts() {
+            renderProducts(getFilteredProducts());
         }
 
         function renderProducts(itemsToRender = getFilteredProducts()) {
@@ -590,24 +883,28 @@
             }
 
             itemsToRender.forEach(product => {
-                const availStock = getAvailableStock(product.productId || product.id);
+                const availStock = getAvailableStock(product.id);
                 const isOutOfStock = availStock <= 0;
+
                 if (product.selectedQty > availStock && availStock > 0) {
                     product.selectedQty = availStock;
+                } else if (availStock === 0) {
+                    product.selectedQty = 0;
+                } else if (!product.selectedQty || product.selectedQty < 1) {
+                    product.selectedQty = 1;
                 }
 
                 const card = document.createElement('div');
                 card.className = "bg-white rounded-3xl border border-emerald-100 shadow-sm overflow-hidden flex flex-col card-hover relative";
                 
                 card.innerHTML = `
-                    <!-- Top Badge Container -->
                     <div class="bg-gradient-to-br from-emerald-50 to-green-100/60 p-6 flex items-center justify-center relative border-b border-emerald-50">
                         <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-emerald-900 border border-emerald-200 text-[11px] font-extrabold px-2.5 py-1 rounded-lg shadow-sm">
                             ${product.code}
                         </span>
                         
                         <span class="absolute top-3 right-3 ${isOutOfStock ? 'bg-rose-100 text-rose-800 border-rose-200' : 'bg-emerald-100 text-emerald-800 border-emerald-200'} border text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm">
-                            ${isOutOfStock ? '<i class="fa-solid fa-triangle-exclamation mr-1"></i>Esgotado' : `<i class="fa-solid fa-box mr-1"></i>Disp: ${availStock} ${product.unitType}`}
+                            ${isOutOfStock ? '<i class="fa-solid fa-triangle-exclamation mr-1"></i>Esgotado' : `<i class="fa-solid fa-box mr-1"></i>Disp: ${availStock}${product.unitType}`}
                         </span>
 
                         <div class="py-2 cursor-pointer" onclick="openModal(${product.id})">
@@ -615,223 +912,154 @@
                         </div>
                     </div>
                     
-                    <!-- Card Body -->
                     <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
                         <div>
-                            <div class="flex justify-between items-start">
-                                <h3 class="text-lg font-extrabold text-gray-900 leading-snug hover:text-emerald-700 transition-colors cursor-pointer" onclick="openModal(${product.id})">
+                            <div class="flex items-start justify-between gap-2">
+                                <h3 class="font-extrabold text-gray-900 text-lg hover:text-emerald-600 cursor-pointer transition-colors" onclick="openModal(${product.id})">
                                     ${product.name}
                                 </h3>
+                                <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold uppercase shrink-0">
+                                    / ${product.unitType}
+                                </span>
                             </div>
-                            <p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
-                                ${product.description}
-                            </p>
-                        </div>
-
-                        <!-- Price Tag -->
-                        <div class="flex justify-between items-baseline pt-2 border-t border-gray-100">
-                            <span class="text-xs text-gray-500 font-medium">Preço Unitário:</span>
-                            <div class="text-right">
-                                <span class="text-xl font-black text-emerald-700">${formatMoney(product.unitCost)}</span>
-                                <span class="text-xs text-gray-500 font-normal">/ ${product.unitType}</span>
+                            <p class="text-xs text-gray-500 line-clamp-2 mt-1">${product.description}</p>
+                            <div class="mt-3 text-2xl font-black text-emerald-700">
+                                ${formatMoney(product.unitCost)}
                             </div>
                         </div>
 
-                        <!-- Quantity Selector Controls -->
-                        <div class="bg-emerald-50/70 p-3 rounded-2xl border border-emerald-100 space-y-2">
-                            <label class="block text-[11px] font-bold text-gray-600 uppercase tracking-wider">
-                                Quantidade a Comprar:
-                            </label>
-                            
-                            <div class="flex items-center gap-2">
-                                <button 
-                                    onclick="changeCardQty(${product.id}, -1)"
-                                    ${isOutOfStock ? 'disabled' : ''}
-                                    class="w-9 h-9 rounded-xl bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm flex items-center justify-center disabled:opacity-40 active:scale-95">
-                                    <i class="fa-solid fa-minus text-xs"></i>
-                                </button>
-                                
-                                <input 
-                                    type="number" 
-                                    id="qty-input-${product.id}"
-                                    value="${isOutOfStock ? 0 : (product.selectedQty || 1)}" 
-                                    min="1" 
-                                    max="${availStock}"
-                                    ${isOutOfStock ? 'disabled' : ''}
-                                    onchange="handleInputQtyChange(${product.id}, this.value)"
-                                    class="w-full text-center bg-white border border-emerald-200 rounded-xl py-1.5 font-extrabold text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-100"
-                                >
-
-                                <button 
-                                    onclick="changeCardQty(${product.id}, 1)"
-                                    ${isOutOfStock ? 'disabled' : ''}
-                                    class="w-9 h-9 rounded-xl bg-white border border-emerald-200 text-emerald-800 font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm flex items-center justify-center disabled:opacity-40 active:scale-95">
-                                    <i class="fa-solid fa-plus text-xs"></i>
-                                </button>
+                        <div class="space-y-3 pt-2 border-t border-gray-100">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="text-xs font-semibold text-gray-500">Qtd:</span>
+                                <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
+                                    <button onclick="changeCardQty(${product.id}, -1)" ${isOutOfStock ? 'disabled' : ''} class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                                        <i class="fa-solid fa-minus text-xs"></i>
+                                    </button>
+                                    <input type="number" id="qty-input-${product.id}" value="${product.selectedQty}" min="1" max="${availStock}" oninput="handleInputQtyChange(${product.id}, this.value)" ${isOutOfStock ? 'disabled' : ''} class="w-12 text-center text-xs font-bold bg-transparent border-none focus:outline-none text-gray-800">
+                                    <button onclick="changeCardQty(${product.id}, 1)" ${isOutOfStock ? 'disabled' : ''} class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                                        <i class="fa-solid fa-plus text-xs"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Add to Cart Action Button -->
-                        <button 
-                            onclick="addToCart(${product.id})"
-                            ${isOutOfStock ? 'disabled' : ''}
-                            class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-black rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed">
-                            <i class="fa-solid fa-cart-plus text-sm"></i>
-                            ${isOutOfStock ? 'Sem Estoque Disponível' : 'Adicionar ao Carrinho'}
-                        </button>
+                            <button onclick="addToCart(${product.id})" ${isOutOfStock ? 'disabled' : ''} class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i class="fa-solid fa-cart-plus"></i> ${isOutOfStock ? 'Esgotado' : 'Adicionar ao Carrinho'}
+                            </button>
+                        </div>
                     </div>
                 `;
+
                 gridContainer.appendChild(card);
             });
+        }
+
+        function updateDashboard() {
+            document.getElementById('stat-total-items').textContent = products.length;
+
+            const totalStock = products.reduce((acc, p) => acc + p.stockQty, 0);
+            document.getElementById('stat-total-stock').textContent = totalStock;
+
+            const totalCartItems = cart.reduce((acc, i) => acc + i.qty, 0);
+            
+            document.getElementById('cart-badge-count').textContent = totalCartItems;
+            if (document.getElementById('cart-badge-count-mobile')) {
+                document.getElementById('cart-badge-count-mobile').textContent = totalCartItems;
+            }
+
+            const totalValuation = products.reduce((acc, p) => acc + (p.stockQty * p.unitCost), 0);
+            document.getElementById('stat-total-val').textContent = formatMoney(totalValuation);
         }
 
         function renderCartDrawer() {
             const container = document.getElementById('cart-items-container');
             const subtitle = document.getElementById('cart-drawer-subtitle');
-            const subtotalEl = document.getElementById('cart-subtotal-val');
-            const totalEl = document.getElementById('cart-total-val');
+            const subtotalVal = document.getElementById('cart-subtotal-val');
+            const totalVal = document.getElementById('cart-total-val');
             const checkoutBtn = document.getElementById('checkout-btn');
 
             container.innerHTML = '';
 
-            let totalItemsCount = 0;
-            let grandTotal = 0;
+            const totalItemsCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            subtitle.textContent = `${totalItemsCount} ${totalItemsCount === 1 ? 'item selecionado' : 'itens selecionados'}`;
 
             if (cart.length === 0) {
                 container.innerHTML = `
-                    <div class="h-full flex flex-col items-center justify-center text-center p-6 space-y-3 my-auto">
-                        <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-300 text-4xl">
-                            <i class="fa-solid fa-basket-shopping"></i>
-                        </div>
-                        <h4 class="font-extrabold text-gray-700">Seu carrinho está vazio</h4>
-                        <p class="text-xs text-gray-400 max-w-xs">Selecione uma fruta do catálogo e escolha a quantidade desejada.</p>
+                    <div class="py-12 text-center text-gray-400 space-y-3">
+                        <i class="fa-solid fa-cart-flatbed text-4xl text-gray-300"></i>
+                        <p class="text-sm font-medium">Seu carrinho está vazio.</p>
                     </div>
                 `;
-                subtitle.textContent = "0 itens selecionados";
-                subtotalEl.textContent = formatMoney(0);
-                totalEl.textContent = formatMoney(0);
+                subtotalVal.textContent = formatMoney(0);
+                totalVal.textContent = formatMoney(0);
                 checkoutBtn.disabled = true;
                 return;
             }
 
             checkoutBtn.disabled = false;
+            let subtotal = 0;
 
             cart.forEach(item => {
                 const product = products.find(p => p.id === item.productId);
                 if (!product) return;
 
-                const itemTotal = product.unitCost * item.qty;
-                totalItemsCount += item.qty;
-                grandTotal += itemTotal;
+                const itemSubtotal = product.unitCost * item.qty;
+                subtotal += itemSubtotal;
 
-                const itemCard = document.createElement('div');
-                itemCard.className = "pt-3 flex gap-3 items-center";
-                itemCard.innerHTML = `
-                    <!-- Mini Product Icon -->
-                    <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0 p-1">
-                        <div class="scale-50">
+                const cartItemEl = document.createElement('div');
+                cartItemEl.className = "py-3 flex items-center justify-between gap-3";
+                cartItemEl.innerHTML = `
+                    <div class="flex items-center gap-3 flex-1 min-w-0">
+                        <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center p-1 border border-emerald-100 shrink-0">
                             ${product.imageSvg}
                         </div>
+                        <div class="truncate">
+                            <h4 class="font-bold text-gray-800 text-sm truncate">${product.name}</h4>
+                            <span class="text-xs text-gray-500">${formatMoney(product.unitCost)} / ${product.unitType}</span>
+                        </div>
                     </div>
 
-                    <!-- Details & Controls -->
-                    <div class="flex-1 min-w-0">
-                        <div class="flex justify-between items-start">
-                            <h5 class="font-bold text-gray-900 text-xs truncate">${product.name}</h5>
-                            <button onclick="removeFromCart(${product.id})" class="text-rose-500 hover:text-rose-700 text-xs p-1" title="Remover item">
-                                <i class="fa-solid fa-trash-can"></i>
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center border border-gray-200 rounded-lg bg-gray-50">
+                            <button onclick="updateCartItemQty(${product.id}, ${item.qty - 1})" class="w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-all text-xs">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <span class="w-8 text-center text-xs font-bold text-gray-800">${item.qty}</span>
+                            <button onclick="updateCartItemQty(${product.id}, ${item.qty + 1})" class="w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-all text-xs">
+                                <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
-                        <p class="text-[11px] text-gray-400">${formatMoney(product.unitCost)} / ${product.unitType}</p>
-                        
-                        <!-- Inline Drawer Quantity Adjuster -->
-                        <div class="flex items-center justify-between mt-2">
-                            <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg">
-                                <button onclick="updateCartItemQty(${product.id}, ${item.qty - 1})" class="w-5 h-5 rounded bg-white font-bold text-xs text-gray-700 shadow-sm flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-all">
-                                    -
-                                </button>
-                                <span class="text-xs font-bold px-2 text-gray-800">${item.qty} ${product.unitType}</span>
-                                <button onclick="updateCartItemQty(${product.id}, ${item.qty + 1})" class="w-5 h-5 rounded bg-white font-bold text-xs text-gray-700 shadow-sm flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-all">
-                                    +
-                                </button>
-                            </div>
-                            <span class="text-xs font-extrabold text-emerald-800">${formatMoney(itemTotal)}</span>
-                        </div>
+                        <button onclick="removeFromCart(${product.id})" class="text-rose-500 hover:text-rose-700 text-sm p-1 transition-colors">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
                     </div>
                 `;
-                container.appendChild(itemCard);
+                container.appendChild(cartItemEl);
             });
 
-            subtitle.textContent = `${totalItemsCount} unidade(s) selecionada(s)`;
-            subtotalEl.textContent = formatMoney(grandTotal);
-            totalEl.textContent = formatMoney(grandTotal);
-        }
-
-        function updateSummaryDashboard() {
-            const totalStock = products.reduce((acc, p) => acc + p.stockQty, 0);
-            const totalValue = products.reduce((acc, p) => acc + (p.stockQty * p.unitCost), 0);
-            
-            const cartQty = cart.reduce((acc, i) => acc + i.qty, 0);
-            const cartVal = cart.reduce((acc, i) => {
-                const prod = products.find(p => p.id === i.productId);
-                return acc + (prod ? prod.unitCost * i.qty : 0);
-            }, 0);
-
-            document.getElementById('stat-total-items').textContent = products.length;
-            document.getElementById('stat-total-stock').textContent = totalStock;
-            document.getElementById('stat-cart-qty').textContent = cartQty;
-            document.getElementById('stat-cart-subtotal').textContent = `Subtotal: ${formatMoney(cartVal)}`;
-            document.getElementById('stat-total-val').textContent = formatMoney(totalValue);
-
-            // Update Header Cart Badge Counter
-            const badge = document.getElementById('cart-badge-count');
-            badge.textContent = cartQty;
+            subtotalVal.textContent = formatMoney(subtotal);
+            totalVal.textContent = formatMoney(subtotal);
         }
 
         function updateAllViews() {
             renderProducts();
+            renderSalesTable();
             renderCartDrawer();
-            updateSummaryDashboard();
+            updateDashboard();
         }
 
-        function getFilteredProducts() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
-            const sortOption = document.getElementById('sort-select').value;
-
-            let filtered = products.filter(p => 
-                p.name.toLowerCase().includes(searchTerm) || 
-                p.code.toLowerCase().includes(searchTerm) || 
-                p.description.toLowerCase().includes(searchTerm)
-            );
-
-            if (sortOption === 'price-asc') {
-                filtered.sort((a, b) => a.unitCost - b.unitCost);
-            } else if (sortOption === 'price-desc') {
-                filtered.sort((a, b) => b.unitCost - a.unitCost);
-            } else if (sortOption === 'stock-desc') {
-                filtered.sort((a, b) => b.stockQty - a.stockQty);
-            }
-
-            return filtered;
-        }
-
-        function filterProducts() {
-            renderProducts(getFilteredProducts());
-        }
-
-        function toggleCartDrawer(forceState) {
-            const backdrop = document.getElementById('cart-drawer-backdrop');
+        function toggleCartDrawer(show) {
             const drawer = document.getElementById('cart-drawer');
+            const backdrop = document.getElementById('cart-drawer-backdrop');
 
-            const isOpen = !drawer.classList.contains('translate-x-full');
-            const newState = forceState !== undefined ? forceState : !isOpen;
+            const isCurrentlyOpen = !drawer.classList.contains('translate-x-full');
+            const shouldOpen = show !== undefined ? show : !isCurrentlyOpen;
 
-            if (newState) {
-                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            if (shouldOpen) {
                 drawer.classList.remove('translate-x-full');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
             } else {
-                backdrop.classList.add('opacity-0', 'pointer-events-none');
                 drawer.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
             }
         }
 
@@ -839,38 +1067,38 @@
             const product = products.find(p => p.id === productId);
             if (!product) return;
 
-            const avail = getAvailableStock(productId);
-
             document.getElementById('modal-code-badge').textContent = product.code;
             document.getElementById('modal-title').textContent = product.name;
             document.getElementById('modal-description').textContent = product.description;
             document.getElementById('modal-cost').textContent = `${formatMoney(product.unitCost)} / ${product.unitType}`;
-            document.getElementById('modal-stock-qty').textContent = `${avail} ${product.unitType} disponível(is)`;
+
+            const availStock = getAvailableStock(productId);
+            document.getElementById('modal-stock-qty').textContent = `${availStock} ${product.unitType}`;
+
             document.getElementById('modal-image-container').innerHTML = product.imageSvg;
 
-            const backdrop = document.getElementById('modal-backdrop');
-            const card = document.getElementById('modal-card');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalCard = document.getElementById('modal-card');
 
-            backdrop.classList.remove('pointer-events-none', 'opacity-0');
-            backdrop.classList.add('opacity-100');
-            card.classList.remove('scale-95');
-            card.classList.add('scale-100');
+            modalBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+            modalCard.classList.remove('scale-95');
+            modalCard.classList.add('scale-100');
         }
 
         function closeModal() {
-            const backdrop = document.getElementById('modal-backdrop');
-            const card = document.getElementById('modal-card');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalCard = document.getElementById('modal-card');
 
-            backdrop.classList.add('opacity-0', 'pointer-events-none');
-            card.classList.add('scale-95');
+            modalBackdrop.classList.add('opacity-0', 'pointer-events-none');
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-95');
         }
 
         function openReceiptModal() {
             const backdrop = document.getElementById('receipt-modal-backdrop');
             const card = document.getElementById('receipt-modal-card');
 
-            backdrop.classList.remove('pointer-events-none', 'opacity-0');
-            backdrop.classList.add('opacity-100');
+            backdrop.classList.remove('opacity-0', 'pointer-events-none');
             card.classList.remove('scale-95');
             card.classList.add('scale-100');
         }
@@ -880,50 +1108,48 @@
             const card = document.getElementById('receipt-modal-card');
 
             backdrop.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
             card.classList.add('scale-95');
-        }
-
-        function animateBadge() {
-            const badge = document.getElementById('cart-badge-count');
-            badge.classList.add('animate-pop');
-            setTimeout(() => badge.classList.remove('animate-pop'), 300);
         }
 
         function showToast(message, type = 'emerald') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            
-            const colorClass = type === 'emerald' ? 'bg-emerald-800 border-emerald-600' :
-                               type === 'rose' ? 'bg-rose-800 border-rose-600' : 'bg-amber-800 border-amber-600';
 
-            toast.className = `${colorClass} text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl border flex items-center gap-2 transform transition-all duration-300 translate-y-4 opacity-0 pointer-events-auto`;
-            toast.innerHTML = `<i class="fa-solid fa-circle-info text-sm"></i> <span>${message}</span>`;
+            const bgClasses = {
+                emerald: 'bg-emerald-800 text-white border-emerald-600',
+                amber: 'bg-amber-800 text-white border-amber-600',
+                rose: 'bg-rose-800 text-white border-rose-600'
+            };
+
+            toast.className = `px-4 py-3 rounded-xl shadow-xl text-xs font-bold border flex items-center gap-2 pointer-events-auto transition-all duration-300 transform translate-y-2 opacity-0 ${bgClasses[type] || bgClasses.emerald}`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${message}</span>`;
 
             container.appendChild(toast);
 
             setTimeout(() => {
-                toast.classList.remove('translate-y-4', 'opacity-0');
+                toast.classList.remove('translate-y-2', 'opacity-0');
             }, 10);
 
             setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-4');
+                toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
 
-        // Global key listeners
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
-                closeReceiptModal();
-                toggleCartDrawer(false);
+        function animateBadge() {
+            const badge = document.getElementById('cart-badge-count');
+            if (badge) {
+                badge.classList.remove('animate-pop');
+                void badge.offsetWidth;
+                badge.classList.add('animate-pop');
             }
-        });
+        }
 
-        // Initialize application lifecycle on load
-        window.onload = function() {
+        // Inicialização do sistema
+        document.addEventListener('DOMContentLoaded', () => {
             updateAllViews();
-        };
+        });
     </script>
 </body>
 </html>
